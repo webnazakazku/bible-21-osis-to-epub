@@ -136,7 +136,6 @@ namespace BibleDoEpubu
         if (cast is HlavniCastKnihy)
         {
           PridatRozpracovanyVers();
-          PocitadloVerse = 1;
         }
 
         VlozitSqlNadpis(cast is HlavniCastKnihy knihy ? knihy.Nadpis : ((CastKnihy) cast).Nadpis);
@@ -206,8 +205,6 @@ namespace BibleDoEpubu
       {
         foreach (CastTextu potomek in cast.Potomci)
         {
-          PocitadloVerse = 1;
-
           VygenerovatCastSql(potomek, bible, kniha);
 
           PridatRozpracovanyVers();
@@ -229,7 +226,10 @@ namespace BibleDoEpubu
 
     private object OstripovatVers(string aktualniTextVerse)
     {
-      return Regex.Replace(aktualniTextVerse, "[^\\x00-\\x7f]", string.Empty);
+        byte[] tempBytes;
+        tempBytes = Encoding.GetEncoding("ISO-8859-8").GetBytes(aktualniTextVerse);
+        string asciiStr = Encoding.UTF8.GetString(tempBytes);
+        return asciiStr;
     }
 
     private void VlozitSqlNadpis(string nadpis)
