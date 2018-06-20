@@ -1,14 +1,16 @@
-# Requirements
+# Osis to MySQL
+
+## Requirements
 
 [.NET SDK](https://www.microsoft.com/net/learn/get-started/windows)
 
-# How to build
+## How to build
 
 ```bash
 dotnet build bible-21-osis-to-epub.csproj
 ```
 
-# How to run
+## How to run
 
 Resources can be found [here](https://1drv.ms/f/s!ArZuV_aXyWwR3YNh7fHBjO8WgYfObQ)
 
