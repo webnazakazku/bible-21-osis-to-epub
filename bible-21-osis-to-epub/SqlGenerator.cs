@@ -229,7 +229,11 @@ namespace BibleDoEpubu
         byte[] tempBytes;
         tempBytes = Encoding.GetEncoding("ISO-8859-8").GetBytes(aktualniTextVerse);
         string asciiStr = Encoding.UTF8.GetString(tempBytes);
-        return asciiStr;
+		StringBuilder b = new StringBuilder(asciiStr);
+		b.Replace("\"", string.Empty);
+		b.Replace("'", string.Empty);
+		
+        return b;
     }
 
     private void VlozitSqlNadpis(string nadpis)
