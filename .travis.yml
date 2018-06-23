@@ -1,2 +1,10 @@
 language: csharp
 solution: bible-21-osis-to-epub/bible-21-osis-to-epub.sln
+deploy:
+  provider: releases
+  api_key:
+    secure: irSZj+4zIUkQ1hadzU31Y4qb2nllgKD1lY/PUKBqdwp5P10ALmEkFmV/ahqfvytz2uhFhdP5YttznPV0uiyIPxbNGzMRhszYz/ntHH3TleEiLkFgrQAWGhnILJyF8lVNLKXIlX8pg+oBaUf6C/LVYs+gKLTxyGmRPPKVlCTiWA8cuzCciRvi8WHnNDoly1w98IvsGguWY+/hTo33oMvdTG48GTg/l0vZ3ES4F/+01cYdBOSq2DE/5pQM4iCJ/Q/Vk0+6wUJBn5dlVXjOxunkUnRVcXP6qYP9r1nwgQM/oJvd5G0pDqejhyW4CQnhJGjurP/E5gVXMMNhZvfOpKirQ28NcuKkig5D+3RyOWymm0BUSsBesvKn3D2XyUWiluvvBMzs7KVBX0g8DkMzLOe5wale42/EhrQHfXzByhBKanR4c2J4mbjLZyN1SEH6i7ef8SF74cmB/G8p1xGqjFKG977YFJT0/gUBBc++yvfmBihcpLpmYcWWPKLbVz+XcpqLZf6Xi7KuZ20HJOmdyFJKs1vqC8NhKMqufM0VH5n4Cc+cJVbsB2AWOiZ3GFAZlwe2tqNnFJVoKxjuuyiiftkyqUE0s/DfQ7V9pQZREw7YAiTa5sIWxSWjkqisQaeoazJg/IJIvVWl2hs5a0CsSQdYJSYAZzoZ8/Z6mmwAYzi/tYc=
+  file: 'bible-21-osis-to-epub/bin/Release/bible-21-epub.exe'
+  on:
+    branch: master
+  if: tag IS present
