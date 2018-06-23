@@ -1,5 +1,11 @@
 # Osis to MySQL
 
+## Download release
+
+- [Latest Release](https://github.com/webnazakazku/bible-21-osis-to-epub/releases)
+
+# Developement 
+
 ## Requirements
 
 [.NET SDK](https://www.microsoft.com/net/learn/get-started/windows)
