@@ -116,7 +116,7 @@ namespace BibleDoEpubu
       string sqlSoubor = Path.Combine(pracovniAdresar, $"{bible.Metadata.Nazev}.sql");
       Encoding kodovani = new UTF8Encoding(false);
 
-      File.WriteAllText(sqlSoubor, Properties.Resources.sql_sablona, kodovani);
+      File.WriteAllText(sqlSoubor, string.Empty, kodovani);
       File.AppendAllText(sqlSoubor, StavecKnihy.ToString(), kodovani);
       File.AppendAllText(sqlSoubor, StavecNadpisy.ToString(), kodovani);
       File.AppendAllText(sqlSoubor, StavecVerse.ToString(), kodovani);
@@ -131,92 +131,124 @@ namespace BibleDoEpubu
 
     public void VygenerovatCastSql(CastTextu cast, Bible bible, Kniha kniha)
     {
-      if (cast is HlavniCastKnihy || cast is CastKnihy)
-      {
-        if (cast is HlavniCastKnihy)
-        {
+      switch (cast.GetType().ToString()){
+        case "HlavniCastKnihy":
           PridatRozpracovanyVers();
-        }
+          goto case "CastKnihy";
 
-        VlozitSqlNadpis(cast is HlavniCastKnihy knihy ? knihy.Nadpis : ((CastKnihy) cast).Nadpis);
+        case "CastKnihy":
+          VygenerovatCastKnihy(cast, bible, kniha);
+          break;
 
-        foreach (CastTextu potomek in cast.Potomci)
-        {
-          VygenerovatCastSql(potomek, bible, kniha);
-        }
-      }
-      else if (cast is UvodKapitoly)
-      {
-        PridatRozpracovanyVers();
-        PocitadloVerse = 1;
+        case "UvodKapitoly":
+          PridatRozpracovanyVers();
+          PocitadloVerse = 1;
+          PocitadloKapitol++;
+          break;
 
-        PocitadloKapitol++;
-      }
-      else if (cast is Vers)
-      {
-        PridatRozpracovanyVers();
-      }
-      else if (cast is Poezie)
-      {
-        foreach (CastTextu potomek in cast.Potomci)
-        {
-          VygenerovatCastSql(potomek, bible, kniha);
-        }
-      }
-      else if (cast is RadekPoezie)
-      {
-        foreach (CastTextu potomek in cast.Potomci)
-        {
-          VygenerovatCastSql(potomek, bible, kniha);
-        }
+        case "Vers":
+          PridatRozpracovanyVers();
+          break;
 
+        case "Poezie":
+          VygenerovatCastPoezie(cast, bible, kniha);
+          break;
+
+        case "RadekPoezie":
+          VygenerovatRadekPoezie(cast, bible, kniha);
+          break;
+
+        case "Odstavec":
+          VygenerovatOdstavec(cast, bible, kniha);
+          break;
+        
+        case "FormatovaniTextu":
+          VygenerovatFormatovaniTextu(cast, bible, kniha);
+          break;
+        
+        case "CastPoezie":
+          AktualniTextVerse += $"<h5>{cast.TextovaData}</h5>\n";
+          break;
+
+        case "CastTextuSTextem":
+          AktualniTextVerse += cast.TextovaData;
+          break;
+
+        case "Kniha":
+          VygenerovatKnihu(cast, bible, kniha);
+          break;
+      }
+    }
+    private void VygenerovatCastKnihy(CastTextu cast, Bible bible, Kniha kniha)
+    {
+      VlozitSqlNadpis(cast is HlavniCastKnihy knihy ? knihy.Nadpis : ((CastKnihy) cast).Nadpis);
+
+      foreach (CastTextu potomek in cast.Potomci)
+      {
+        VygenerovatCastSql(potomek, bible, kniha);
+      }
+    }
+
+    private void VygenerovatCastPoezie(CastTextu cast, Bible bible, Kniha kniha)
+    {
+      if (!string.IsNullOrEmpty(AktualniTextVerse)) {
         AktualniTextVerse += "<br/>";
       }
-      else if (cast is Odstavec)
+      foreach (CastTextu potomek in cast.Potomci)
       {
+        VygenerovatCastSql(potomek, bible, kniha);
+      }
+    }
+
+    private void VygenerovatRadekPoezie(CastTextu cast, Bible bible, Kniha kniha)
+    {
+      foreach (CastTextu potomek in cast.Potomci)
+      {
+        VygenerovatCastSql(potomek, bible, kniha);
+      }
+
+      AktualniTextVerse += "<br/>";
+    }
+
+    private void VygenerovatOdstavec(CastTextu cast, Bible bible, Kniha kniha)
+    {
+      AktualniTextVerse += "<br/>";
+      foreach (CastTextu potomek in cast.Potomci)
+      {
+        VygenerovatCastSql(potomek, bible, kniha);
+      }
+    }
+
+    private void VygenerovatFormatovaniTextu(CastTextu cast, Bible bible, Kniha kniha)
+    {
+      if ((cast as FormatovaniTextu).Kurziva)
+      {
+        AktualniTextVerse += "<i>";
+
         foreach (CastTextu potomek in cast.Potomci)
         {
           VygenerovatCastSql(potomek, bible, kniha);
         }
-      }
-      else if (cast is FormatovaniTextu)
-      {
-        if ((cast as FormatovaniTextu).Kurziva)
-        {
-          AktualniTextVerse += "<i>";
 
-          foreach (CastTextu potomek in cast.Potomci)
-          {
-            VygenerovatCastSql(potomek, bible, kniha);
-          }
+        AktualniTextVerse += "</i>";
+      }
+    }
 
-          AktualniTextVerse += "</i>";
-        }
-      }
-      else if (cast is CastPoezie)
+    private void VygenerovatKnihu(CastTextu cast, Bible bible, Kniha kniha)
+    {
+      foreach (CastTextu potomek in cast.Potomci)
       {
-        AktualniTextVerse += $"<h5>{cast.TextovaData}</h5>\n";
-      }
-      else if (cast is CastTextuSTextem)
-      {
-        AktualniTextVerse += cast.TextovaData;
-      }
-      else if (cast is Kniha)
-      {
-        foreach (CastTextu potomek in cast.Potomci)
-        {
-          VygenerovatCastSql(potomek, bible, kniha);
+        VygenerovatCastSql(potomek, bible, kniha);
 
-          PridatRozpracovanyVers();
-        }
+        PridatRozpracovanyVers();
       }
     }
 
     private void PridatRozpracovanyVers()
     {
-      if (!string.IsNullOrEmpty(AktualniTextVerse))
+      if (!string.IsNullOrEmpty(AktualniTextVerse) && AktualniTextVerse != "<br/>")
       {
-        Verse.Add($"({PoradiKnihy}, '{PocitadloKapitol}', '{PocitadloVerse}', '{AktualniTextVerse}', " +
+        Verse.Add($"({PoradiKnihy}, '{PocitadloKapitol}', '{PocitadloVerse}', '{RemoveMultipleSpaces(AktualniTextVerse)}', " +
                   $"'{OstripovatVers(AktualniTextVerse)}', {GlobalniPocitadloVersu++})");
         PocitadloVerse++;
       }
@@ -226,14 +258,21 @@ namespace BibleDoEpubu
 
     private object OstripovatVers(string aktualniTextVerse)
     {
-        byte[] tempBytes;
-        tempBytes = Encoding.GetEncoding("ISO-8859-8").GetBytes(aktualniTextVerse);
-        string asciiStr = Encoding.UTF8.GetString(tempBytes);
-		StringBuilder b = new StringBuilder(asciiStr);
-		b.Replace("\"", string.Empty);
-		b.Replace("'", string.Empty);
-		
-        return b;
+      byte[] tempBytes;
+      tempBytes = Encoding.GetEncoding("ISO-8859-8").GetBytes(aktualniTextVerse);
+      string strippedStr = Encoding.UTF8.GetString(tempBytes);
+      strippedStr = strippedStr.Replace("\"", string.Empty);
+      strippedStr = strippedStr.Replace("'", string.Empty);
+      strippedStr = Regex.Replace(strippedStr, @"<.*?>|\t|\n|\r", string.Empty);
+      strippedStr = Regex.Replace(strippedStr, @"\s\s+", " ");
+
+      return strippedStr;
+    }
+
+    private object RemoveMultipleSpaces(string aktualniTextVerse)
+    {
+      String strippedStr = Regex.Replace(aktualniTextVerse, @"\s\s+", " ");
+      return strippedStr;
     }
 
     private void VlozitSqlNadpis(string nadpis)
