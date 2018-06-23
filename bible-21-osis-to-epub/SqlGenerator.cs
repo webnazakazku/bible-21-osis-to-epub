@@ -264,12 +264,12 @@ namespace BibleDoEpubu
       strippedStr = strippedStr.Replace("\"", string.Empty);
       strippedStr = strippedStr.Replace("'", string.Empty);
       strippedStr = Regex.Replace(strippedStr, @"<.*?>|\t|\n|\r", string.Empty);
-      strippedStr = Regex.Replace(strippedStr, @"\s\s+", " ");
+      strippedStr = this.RemoveMultipleSpaces(strippedStr);
 
       return strippedStr;
     }
 
-    private object RemoveMultipleSpaces(string aktualniTextVerse)
+    private string RemoveMultipleSpaces(string aktualniTextVerse)
     {
       String strippedStr = Regex.Replace(aktualniTextVerse, @"\s\s+", " ");
       return strippedStr;
