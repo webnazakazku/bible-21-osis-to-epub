@@ -131,7 +131,7 @@ namespace BibleDoEpubu
 
     public void VygenerovatCastSql(CastTextu cast, Bible bible, Kniha kniha)
     {
-      switch (cast.GetType().ToString()){
+      switch (cast.GetType().Name){
         case "HlavniCastKnihy":
           PridatRozpracovanyVers();
           goto case "CastKnihy";
