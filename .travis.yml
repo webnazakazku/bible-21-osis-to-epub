@@ -14,7 +14,7 @@ jobs:
       deploy:
         provider: releases
         api_key:
-          secure: $SECURE_API_KEY
+          secure: "TXM5mZ6NIQ6mvj7wC+a662e98xHFHueYCayGL2fb1LJ+xoQGtC/31LzUNYbs4UuUJmxO9HbW/53WYhnMHZFbKbTruZp7wOlY1uNaXkuYXn2XISpS4qdMpLhFNeCh/3LsS9NcOVrcZgp0W7r3IXl13ZXdn+9lGrhTGTuqziZgZlm/rnDEwxrybjpT8/2eCaMXtlJOX03Uu6pVKlhpXAqd2NWVt8YXynoRgu+Xw3byddEiYCfAppqbHOdW15QofTGHE1pOiHwM69PBZSBKbjcQb+dDZ3yigHxkDXSuJ4cdEX5rU9l8JhOcSLaM/7/ON24kEvXjEAEz+lFKda0dhGvuvc0FIF6R2mFTcycHbRQEsk50NyVP7G7CBOxGYI5970w+/nevlyecAh7rw6aeG8SXXUa1XeTx1pUcRj2Ntj2GxzYtsfqiamKGfInKkxnGpkrstCwLwC+sf6Ml7oT7F4OEsGDPzT7TXJMfrUV91wekQP0U51WG6ZZJ/Onp/9r6GpRnWrLxeZMJJz6/mE8lR3Xu7BqBFYG/C8JdqFzjX0bmPmM9YrUWavGEao7qu5lSyymqMd6Ay/Hu+lbQD7iBMIXr9U6uMpNowsbVOuE1MAKtXgaBXconTkZv+/GAauGLsCig67+Ssr7m8QMi0/2wTLBLZXgBuz5HxWg0NjJ/M+rHmOI="
         file: './bible-21-osis-to-epub/bin/Release/bible-21-epub.exe'
         skip_cleanup: true
         on:
