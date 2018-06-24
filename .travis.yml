@@ -3,13 +3,13 @@ solution: ./bible-21-osis-to-epub/bible-21-osis-to-epub.sln
 
 jobs:
   include:
-  
+
     - stage: Build Application
       install:
       - travis_retry nuget restore -source "https://www.nuget.org/api/v2" ./bible-21-osis-to-epub/bible-21-osis-to-epub.sln
       script: 
       - echo "Building Application ..."
-      - xbuild ./bible-21-osis-to-epub/bible-21-osis-to-epub.sln
+      - msbuild ./bible-21-osis-to-epub/bible-21-osis-to-epub.sln /p:Configuration=Release
 
     - stage: GitHub Release
       script: echo "Deploying to GitHub releases ..."
