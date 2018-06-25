@@ -99,14 +99,17 @@ namespace BibleDoEpubu
         Nadpisy.Clear();
         Verse.Clear();
 
+        string nadpis = bible.MapovaniZkratekKnih[kniha.Id].Nadpis;
+        string[] nadpisPale = nadpis.Split(';');
+        
         StavecKnihy.Append("INSERT INTO bible_knihy (id, kod, nazev, `order`) VALUES " +
-                           $"({poradi + 1}, '{kniha.Id}', '{bible.MapovaniZkratekKnih[kniha.Id].Nadpis}', {poradi + 1});\n");
+                           $"({poradi + 1}, '{nadpisPale[1]}', '{nadpisPale[0]}', {poradi + 1});\n");
 
         VygenerovatSqlProKnihu(bible, kniha);
 
         StavecNadpisy.Append(string.Join(string.Empty, Nadpisy));
         StavecNadpisy.AppendLine();
-
+        
         StavecVerse.Append("INSERT INTO bible_verse (kniha_id, kapitola, vers, text, stripped, `order`) VALUES \n");
         StavecVerse.Append(string.Join(",\n", Verse));
         StavecVerse.Append(";");
